@@ -19,29 +19,37 @@ jobs:
           distribution: temurin
           java-version: '11'
 
-      - name: Install Android SDK cmdline-tools
+      - name: Install Android SDK cmdline-tools (with structure fix + debug)
         run: |
+          echo "📁 Creating Android SDK directories..."
           mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
-          wget -qO sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-          unzip -q sdk-tools.zip -d $ANDROID_SDK_ROOT/cmdline-tools
-          mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
-          rm sdk-tools.zip
+          cd $ANDROID_SDK_ROOT/cmdline-tools
 
-          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
-          "platform-tools" "platforms;android-33" "build-tools;33.0.0"
+          echo "📥 Downloading Android cmdline-tools..."
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O tools.zip
 
+          echo "📦 Unzipping..."
+          unzip -q tools.zip -d cmdline-tools
+          mv cmdline-tools cmdline-tools-temp
+          mkdir cmdline-tools
+          mv cmdline-tools-temp cmdline-tools/latest
 
+          echo "✅ Directory structure:"
+          ls -R $ANDROID_SDK_ROOT/cmdline-tools
 
-      - name: Accept Android licenses
-        run: yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses
+      - name: Accept Android licenses + install packages
+        run: |
+          echo "📝 Accepting licenses..."
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses
 
-
-
+          echo "📦 Installing SDK packages..."
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
+            "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
       - name: Set environment variables
         run: |
-          echo "PATH=$ANDROID_SDK_ROOT/platform-tools:$PATH" >> $GITHUB_ENV
-          echo "PATH=$ANDROID_SDK_ROOT/emulator:$PATH" >> $GITHUB_ENV
+          echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
+          echo "$ANDROID_SDK_ROOT/emulator" >> $GITHUB_PATH
 
       - name: Install EAS CLI
         run: npm install -g eas-cli expo-cli
