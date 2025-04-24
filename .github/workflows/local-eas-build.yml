@@ -61,16 +61,13 @@ jobs:
             npm install
           fi
 
-
       - name: Generate eas.json (if not present)
         run: |
           if [ ! -f eas.json ]; then
-            echo "{\"build\":{\"local-apk\":{\"android\":{\"buildType\":\"apk\"}}}}" > eas.json
+            echo "{\"cli\":{\"version\":\">= 3.0.0\",\"requireAuthentication\":false},\"build\":{\"local-apk\":{\"android\":{\"buildType\":\"apk\"},\"developmentClient\":false,\"distribution\":\"internal\"}},\"owner\":\"jehadurre\"}" > eas.json
           else
             echo "✅ eas.json already exists."
           fi
-
-          
 
       - name: Debug EAS token presence
         run: |
@@ -86,12 +83,10 @@ jobs:
       - name: Prebuild Android project
         run: npx expo prebuild --platform android
 
-
       - name: Run local EAS build (APK)
         run: eas build --platform android --profile local-apk --local
         env:
           EAS_ACCESS_TOKEN: ${{ secrets.EAS_ACCESS_TOKEN }}
-
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
