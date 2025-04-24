@@ -61,21 +61,16 @@ jobs:
             npm install
           fi
 
+
       - name: Generate eas.json (if not present)
         run: |
           if [ ! -f eas.json ]; then
-            echo '{
-  "build": {
-    "local-apk": {
-      "android": {
-        "buildType": "apk"
-      }
-    }
-  }
-}' > eas.json
+            echo "{\"build\":{\"local-apk\":{\"android\":{\"buildType\":\"apk\"}}}}" > eas.json
           else
             echo "✅ eas.json already exists."
           fi
+
+          
 
       - name: Debug EAS token presence
         run: |
