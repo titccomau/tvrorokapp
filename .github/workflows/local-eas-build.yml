@@ -51,7 +51,11 @@ jobs:
         run: npm install -g eas-cli expo-cli
 
       - name: Install project dependencies
-        run: npm ci
+        run: |
+          echo "📦 Checking for package-lock.json"
+          ls -l package-lock.json
+          echo "🔧 Installing dependencies..."
+          npm ci || npm install  # Try `npm ci` first, then fallback to `npm install` if it fails
 
       - name: Prebuild Android project
         run: npx expo prebuild --platform android
