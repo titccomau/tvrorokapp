@@ -11,6 +11,17 @@ jobs:
       - name: Setup repo
         uses: actions/checkout@v4
 
+
+      - name: Install project dependencies
+        run: |
+          echo "📦 Checking for package-lock.json"
+          if [ -f package-lock.json ]; then
+            echo "🔧 Procedding NEXT..."
+          else
+            echo "📦 package-lock.json not found, using npm install..."
+            npm install
+          fi
+
       - name: Setup node
         uses: actions/setup-node@v3
         with:
