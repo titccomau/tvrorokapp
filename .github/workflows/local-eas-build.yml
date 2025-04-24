@@ -61,13 +61,22 @@ jobs:
             npm install
           fi
 
+      # - name: Generate eas.json (if not present)
+      #   run: |
+      #     if [ ! -f eas.json ]; then
+      #       echo "{\"cli\":{\"version\":\">= 3.0.0\",\"requireAuthentication\":false},\"build\":{\"local-apk\":{\"android\":{\"buildType\":\"apk\"},\"developmentClient\":false,\"distribution\":\"internal\"}},\"owner\":\"jehadurre\"}" > eas.json
+      #     else
+      #       echo "✅ eas.json already exists."
+      #     fi
+
       - name: Generate eas.json (if not present)
         run: |
           if [ ! -f eas.json ]; then
-            echo "{\"cli\":{\"version\":\">= 3.0.0\",\"requireAuthentication\":false},\"build\":{\"local-apk\":{\"android\":{\"buildType\":\"apk\"},\"developmentClient\":false,\"distribution\":\"internal\"}},\"owner\":\"jehadurre\"}" > eas.json
+            echo "{\"cli\":{\"version\":\">= 3.0.0\"},\"build\":{\"local-apk\":{\"android\":{\"buildType\":\"apk\"},\"developmentClient\":false,\"distribution\":\"internal\"}}}" > eas.json
           else
             echo "✅ eas.json already exists."
           fi
+
 
       - name: Debug EAS token presence
         run: |
