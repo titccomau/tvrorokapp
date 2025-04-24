@@ -53,9 +53,13 @@ jobs:
       - name: Install project dependencies
         run: |
           echo "📦 Checking for package-lock.json"
-          ls -l package-lock.json
-          echo "🔧 Installing dependencies..."
-          npm ci || npm install  # Try `npm ci` first, then fallback to `npm install` if it fails
+          if [ -f package-lock.json ]; then
+            echo "🔧 Installing dependencies using npm ci..."
+            npm ci
+          else
+            echo "📦 package-lock.json not found, using npm install..."
+            npm install
+          fi
 
       - name: Prebuild Android project
         run: npx expo prebuild --platform android
