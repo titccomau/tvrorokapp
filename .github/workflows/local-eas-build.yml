@@ -64,9 +64,7 @@ jobs:
       - name: Generate eas.json (if not present)
         run: |
           if [ ! -f eas.json ]; then
-            echo "⚙️ Creating default eas.json with local-apk profile..."
-            cat > eas.json <<EOF
-{
+            echo '{
   "build": {
     "local-apk": {
       "android": {
@@ -74,8 +72,7 @@ jobs:
       }
     }
   }
-}
-EOF
+}' > eas.json
           else
             echo "✅ eas.json already exists."
           fi
