@@ -23,14 +23,18 @@ jobs:
         run: |
           mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest
           wget -qO sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-          unzip -q sdk-tools.zip -d $ANDROID_SDK_ROOT/cmdline-tools/latest
+          unzip -q sdk-tools.zip -d $ANDROID_SDK_ROOT/cmdline-tools/latest/temp
+          mv $ANDROID_SDK_ROOT/cmdline-tools/latest/temp/cmdline-tools/* $ANDROID_SDK_ROOT/cmdline-tools/latest/
+          rm -rf $ANDROID_SDK_ROOT/cmdline-tools/latest/temp
           rm sdk-tools.zip
+
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
             "platform-tools" "platforms;android-33" "build-tools;33.0.0"
 
 
       - name: Accept Android licenses
         run: yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses
+
 
 
       - name: Set environment variables
