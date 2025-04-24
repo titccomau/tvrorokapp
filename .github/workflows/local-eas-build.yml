@@ -49,7 +49,7 @@ jobs:
         run: eas build --platform android --profile local-apk --local
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: local-app-release-apk
           path: android/app/build/outputs/apk/release/*.apk
